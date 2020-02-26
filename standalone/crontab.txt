@@ -1,0 +1,17 @@
+#신상품 크롤링
+05 02,14 * * * /usr/bin/python3 /home/ec2-user/app/shopsmart-crawler/research/init.py >> /home/ec2-user/app/shopsmart-crawler/logs/research_`date +\%Y\%m\%d`.log
+
+#주문서 크롤링
+15 * * * * /usr/bin/python3 /home/ec2-user/app/shopsmart-crawler/order/get_order_info.py >> /home/ec2-user/app/shopsmart-crawler/logs/order_`date +\%Y\%m\%d`.log
+
+#자동매입 실행
+0 23 * * * /usr/bin/python3 /home/ec2-user/app/shopsmart-crawler/order/send_wholesale_order.py >> /home/ec2-user/app/shopsmart-crawler/logs/send_wholesale_order_`date +\%Y\%m\%d`.log
+
+#신상마켓 주기적 등록
+30 * * *  * /usr/bin/python3 /home/ec2-user/app/shopsmart-crawler/sinsang/init.py >> /home/ec2-user/app/shopsmart-crawler/logs/sm_`date +\%Y\%m\%d`.log
+
+#한시간에 한번 메모리 비우기
+00 * * *  * sync; echo 3 > /proc/sys/vm/drop_caches >> /home/ec2-user/app/shopsmart-crawler/logs/memory_flush_`date +\%Y\%m\%d`.log
+
+#5일이 넘은로그파일 삭제
+                                                                                               1 0 * * * find /home/ec2-user/app/shopsmart-crawler/logs -mtime +5 -name '*.log' -exec rm {} \;
